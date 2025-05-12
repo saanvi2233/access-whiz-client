@@ -4,6 +4,22 @@ import axios from 'axios';
 function Analyzer() {
     const [url, setUrl] = useState('');
   const [issues, setIssues] = useState([]);
+
+  //adding emoji
+  const getEmoji=(impact)=>{
+    switch(impact){
+      case 'critical':
+        return '🛑';
+      case 'serious':
+        return '⚠️';
+      case 'moderate':
+        return '🔶';
+      default:
+        return 'ℹ️';
+    }
+  }
+
+
  const handleAnalyze = async () => {
     try {
       const res = await axios.post('http://localhost:5000/analyze', { url });
@@ -23,7 +39,7 @@ return (
         <ul>
           {issues.map((issue, idx) => (
             <li key={idx}>
-              <strong>{issue.help}</strong>: {issue.description}
+              <strong>{getEmoji(issue.impact)}{issue.help}</strong>: {issue.description}
             </li>
           ))}
         </ul>
