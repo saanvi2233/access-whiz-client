@@ -1,62 +1,64 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../style/analyzer.css';
 
 function Analyzer() {
   const [url, setUrl] = useState('');
   const [issues, setIssues] = useState([]);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [shouldStop, setShouldStop] = useState(false);
 
-  // Adding emoji based on severity
+  // Emoji based on impact
   const getEmoji = (impact) => {
     switch (impact) {
-      case 'critical':
-        return '🛑';
-      case 'serious':
-        return '⚠️';
-      case 'moderate':
-        return '🔶';
-      default:
-        return 'ℹ️';
+      case 'critical': return '🛑';
+      case 'serious': return '⚠️';
+      case 'moderate': return '🔶';
+      default: return 'ℹ️';
     }
   };
 
-  // Function to speak the text using Speech Synthesis API
+  // Speak text and return a promise that resolves after speech ends
   const speak = (text) => {
-    const msg = new SpeechSynthesisUtterance(text);
-    window.speechSynthesis.speak(msg);
-    setIsSpeaking(true);
-    msg.onend = () => {
-      setIsSpeaking(false); // Reset speaking state after speaking ends
-    };
-    msg.onerror = (e) => {
-      console.error("Error while speaking: ", e);
-      setIsSpeaking(false);
-    };
+    return new Promise((resolve) => {
+      const msg = new SpeechSynthesisUtterance(text);
+      msg.onend = resolve;
+      msg.onerror = resolve;
+      window.speechSynthesis.speak(msg);
+    });
   };
 
-  // Stop the speech synthesis immediately
+  // Stop speech and update state
   const stopSpeaking = () => {
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
+    setShouldStop(true);
   };
 
-  // Handle the analysis request
+  // Narrate all issues one by one
+  const narrateIssues = async (violations) => {
+    setIsSpeaking(true);
+    setShouldStop(false);
+
+    await speak(`Found ${violations.length} accessibility issues.`);
+
+    for (let i = 0; i < violations.length; i++) {
+      if (shouldStop) break;
+      const issue = violations[i];
+      const text = `${getEmoji(issue.impact)} ${issue.help}: ${issue.description}`;
+      await speak(text);
+    }
+
+    setIsSpeaking(false);
+  };
+
+  // Analyze the URL and start narration
   const handleAnalyze = async () => {
     try {
       const res = await axios.post('http://localhost:5000/analyze', { url });
-      setIssues(res.data.violations);
-      
-      // Narrate the number of issues found
-      speak(`Found ${res.data.violations.length} accessibility issues`);
-
-      // Narrate each issue with a delay and allow stopping at any point
-      res.data.violations.forEach((issue, index) => {
-        setTimeout(() => {
-          if (isSpeaking) {
-            speak(`${getEmoji(issue.impact)} ${issue.help}: ${issue.description}`);
-          }
-        }, index * 3000); // Adding a delay of 3 seconds between issues
-      });
+      const violations = res.data.violations;
+      setIssues(violations);
+      narrateIssues(violations);
     } catch (err) {
       console.error('Error analyzing:', err);
     }
