@@ -10,6 +10,7 @@ function Analyzer() {
   const [shouldStop, setShouldStop] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [pastAnalyse, setPastAnalyse] = useState([]);
   const navigate = useNavigate();
 
   // Emoji based on impact
@@ -32,7 +33,15 @@ function Analyzer() {
     }
   };
 
-  // Speak text and return a promise that resolves after speech ends
+  const fetchPastAnalyses = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/analyze/all');
+      setPastAnalyse(res.data);
+    } catch (err) {
+      console.error('Error fetching past analyses:', err);
+    }
+  };
+
   const speak = (text) => {
     return new Promise((resolve) => {
       const msg = new SpeechSynthesisUtterance(text);
@@ -42,14 +51,12 @@ function Analyzer() {
     });
   };
 
-  // Stop speech and update state
   const stopSpeaking = () => {
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
     setShouldStop(true);
   };
 
-  // Narrate all issues one by one
   const narrateIssues = async (violations) => {
     setIsSpeaking(true);
     setShouldStop(false);
@@ -66,7 +73,6 @@ function Analyzer() {
     setIsSpeaking(false);
   };
 
-  // Analyze the URL and start narration
   const handleAnalyze = async () => {
     if (!url) {
       setError('Please enter a URL');
@@ -80,6 +86,12 @@ function Analyzer() {
       const violations = res.data.violations;
       setIssues(violations);
       narrateIssues(violations);
+
+      // Save the result
+await axios.post('http://localhost:5000/analyze/save', {
+  url,
+  violations
+});
     } catch (err) {
       console.error('Error analyzing:', err);
       setError('Failed to analyze the website. Please try again.');
@@ -88,32 +100,27 @@ function Analyzer() {
     }
   };
 
+  const exportToCSV = () => {
+    const headers = ['Issue', 'Description', 'Impact'];
+    const rows = issues.map(issue => [issue.help, issue.description, issue.impact]);
 
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(value => `"${value}"`).join(','))
+    ].join('\n');
 
-//Export Accessibility Report as PDF/CSV
-const exportToCSV=()=>{
-  const headers=['Issue','Description','Impact'];
-  const rows=issues.map(issue=>[issue.help,issue.description,issue.impact]);
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const fileUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    link.setAttribute('download', 'accessibility_report.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
-  const csvContent=[
-    headers.join(','),
-    ...rows.map(row=>row.map(value=> `"${value}"`).join(','))
-  ].join('\n');
-  const blob=new Blob([csvContent],{type:'text/csv;charset=utf-8;'});// Create a link to download the CSV
-  const url=URL.createObjectURL(blob); // Create a link element
-
-  const link=document.createElement('a'); // Set the link's href to the CSV data
-  link.href=url; // Set the download attribute with a filename
-  link.setAttribute('download','accessibility_report.csv'); // Append the link to the body
-  document.body.appendChild(link); // Programmatically click the link to trigger the download
-  link.click(); // Remove the link from the document
-  document.body.removeChild(link); // Clean up the URL object
-}
-
-
-
-  // Clean up speech synthesis on unmount
   useEffect(() => {
+    fetchPastAnalyses();
     return () => {
       window.speechSynthesis.cancel();
     };
@@ -124,7 +131,7 @@ const exportToCSV=()=>{
       <button className="back-button" onClick={() => navigate('/')}>
         ← Back to Dashboard
       </button>
-      
+
       <div className="analyzer-header">
         <h1>Accessibility Analyzer</h1>
         <p className="subtitle">Test any website for accessibility issues and get detailed recommendations</p>
@@ -140,8 +147,8 @@ const exportToCSV=()=>{
           disabled={isLoading || isSpeaking}
         />
         <div className="button-group">
-          <button 
-            onClick={handleAnalyze} 
+          <button
+            onClick={handleAnalyze}
             disabled={isLoading || isSpeaking || !url}
             className="analyze-button"
           >
@@ -153,8 +160,8 @@ const exportToCSV=()=>{
               'Analyze Website'
             )}
           </button>
-          <button 
-            onClick={stopSpeaking} 
+          <button
+            onClick={stopSpeaking}
             disabled={!isSpeaking}
             className="stop-button"
           >
@@ -178,8 +185,8 @@ const exportToCSV=()=>{
 
           <div className="issues-list">
             {issues.map((issue, idx) => (
-              <div 
-                key={idx} 
+              <div
+                key={idx}
                 className="issue-card"
                 style={{ borderLeft: `4px solid ${getColor(issue.impact)}` }}
               >
@@ -192,24 +199,26 @@ const exportToCSV=()=>{
                 </div>
                 <p className="issue-description">{issue.description}</p>
                 {issue.helpUrl && (
-                  <a 
-                    href={issue.helpUrl} 
-                    target="_blank" 
+                  <a
+                    href={issue.helpUrl}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="learn-more-link"
                   >
                     Learn how to fix this →
                   </a>
-                  
                 )}
               </div>
-              
             ))}
           </div>
-                <button className="export-button" onClick={exportToCSV} disabled={issues.length === 0}>
-                  Export as CSV
-                </button>
 
+          <button
+            className="export-button"
+            onClick={exportToCSV}
+            disabled={issues.length === 0}
+          >
+            Export as CSV
+          </button>
         </div>
       )}
     </div>
