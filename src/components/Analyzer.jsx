@@ -88,6 +88,30 @@ function Analyzer() {
     }
   };
 
+
+
+//Export Accessibility Report as PDF/CSV
+const exportToCSV=()=>{
+  const headers=['Issue','Description','Impact'];
+  const rows=issues.map(issue=>[issue.help,issue.description,issue.impact]);
+
+  const csvContent=[
+    headers.join(','),
+    ...rows.map(row=>row.map(value=> `"${value}"`).join(','))
+  ].join('\n');
+  const blob=new Blob([csvContent],{type:'text/csv;charset=utf-8;'});// Create a link to download the CSV
+  const url=URL.createObjectURL(blob); // Create a link element
+
+  const link=document.createElement('a'); // Set the link's href to the CSV data
+  link.href=url; // Set the download attribute with a filename
+  link.setAttribute('download','accessibility_report.csv'); // Append the link to the body
+  document.body.appendChild(link); // Programmatically click the link to trigger the download
+  link.click(); // Remove the link from the document
+  document.body.removeChild(link); // Clean up the URL object
+}
+
+
+
   // Clean up speech synthesis on unmount
   useEffect(() => {
     return () => {
@@ -176,10 +200,16 @@ function Analyzer() {
                   >
                     Learn how to fix this →
                   </a>
+                  
                 )}
               </div>
+              
             ))}
           </div>
+                <button className="export-button" onClick={exportToCSV} disabled={issues.length === 0}>
+                  Export as CSV
+                </button>
+
         </div>
       )}
     </div>
