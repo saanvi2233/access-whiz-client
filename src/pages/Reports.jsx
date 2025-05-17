@@ -7,7 +7,9 @@ import "../style/reports.css";
 function Reports() { 
     const [pastAnalyse, setPastAnalyse] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+const [expandedIndex, setExpandedIndex] = useState(null);
     const navigate = useNavigate();
+
 
      const fetchPastAnalyses = async () => {
         try {
@@ -82,9 +84,40 @@ function Reports() {
                 </div>
 
                 <div className="report-actions">
-                  <button className="view-details-btn">
-                    View Details
-                  </button>
+                {/* <button
+            className="view-details-btn"
+            onClick={() => setExpandedIndex(index === expandedIndex ? null : index)}
+            >
+            {expandedIndex === index ? "Hide Details" : "View Details"}
+            </button>
+
+                    {expandedIndex === index && (
+        <div className="violation-details">
+            {report.violations.map((violation, vIndex) => (
+            <div key={vIndex} className="violation-card">
+                <h4>{violation.id} - {violation.impact}</h4>
+                <p><strong>Description:</strong> {violation.description}</p>
+                <p><strong>Help:</strong> <a href={violation.helpUrl} target="_blank" rel="noopener noreferrer">{violation.help}</a></p>
+                <ul>
+                {violation.nodes.map((node, nIndex) => (
+                    <li key={nIndex}>
+                    <code>{node.html}</code>
+                    </li>
+                ))}
+                </ul>
+            </div>
+            ))}
+        </div>
+)}
+
+ */}
+                <button
+                className="view-details-btn"
+                onClick={() => navigate(`/report/${report._id}`)}
+                >
+                View Details
+                </button>
+
                   <button className="export-btn">
                     Export Report
                   </button>

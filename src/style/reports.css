@@ -188,3 +188,28 @@
     flex-direction: column;
   }
 }
+.violation-details {
+  margin-top: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.violation-card {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.violation-card h4 {
+  margin: 0 0 0.5rem 0;
+  color: #dc3545;
+}
+
+.violation-card code {
+  background: #eee;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  display: inline-block;
+}

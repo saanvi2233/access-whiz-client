@@ -4,6 +4,8 @@ import Analyzer from './components/Analyzer';
 import Dashboard from './components/Dashboard.jsx';
 import About from './pages/About';
 import Reports from './pages/Reports';
+import DetailReport from './pages/DetailReport';
+
 import './App.css';
 
 function App() {
@@ -47,6 +49,8 @@ function App() {
               <Route path="/analyzer" element={<Analyzer />} />
               <Route path="/about" element={<About />} />
               <Route path="/reports" element={<Reports/>} />
+              <Route path="/report/:id" element={<DetailReport />} />
+
             </Routes>
           </div>
         </main>
