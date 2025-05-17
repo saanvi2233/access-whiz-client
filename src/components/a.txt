@@ -1,0 +1,13 @@
+import React, { useState, useEffect } from 'react';
+React: The main React library, required to use JSX and build components.
+
+useState: A React hook to define and manage state variables in functional components.
+
+useEffect: Another React hook to perform side effects like API calls, running code after render, etc.
+
+import axios from 'axios';
+axios: A popular HTTP client used to make API requests like GET, POST, etc.
+
+import { useNavigate } from 'react-router-dom';
+useNavigate: A hook from React Router to programmatically navigate between routes (like going back to dashboard).
+

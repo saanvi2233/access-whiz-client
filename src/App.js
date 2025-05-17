@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Analyzer from './components/Analyzer';
 import Dashboard from './components/Dashboard.jsx';
 import About from './pages/About';
+import Reports from './pages/Reports';
 import './App.css';
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="/analyzer" element={<Analyzer />} />
               <Route path="/about" element={<About />} />
+              <Route path="/reports" element={<Reports/>} />
             </Routes>
           </div>
         </main>

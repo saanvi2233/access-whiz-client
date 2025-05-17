@@ -127,7 +127,10 @@ await axios.post('http://localhost:5000/analyze/save', {
   }, []);
 
   return (
+
+
     <div className="analyzer-container">
+      
       <button className="back-button" onClick={() => navigate('/')}>
         ← Back to Dashboard
       </button>

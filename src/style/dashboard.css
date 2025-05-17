@@ -118,8 +118,8 @@ body {
 }
 
 .card-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
+  background-color: #3a5a8f;
+  /* cursor: not-allowed; */
 }
 
 .analyzer-card .card-button {

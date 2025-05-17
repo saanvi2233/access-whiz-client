@@ -24,7 +24,10 @@ function Dashboard() {
           <div className="card-icon">📊</div>
           <h3>View Reports</h3>
           <p>Export or review past analysis to track your accessibility improvements over time.</p>
-          <button className="card-button" disabled>Coming Soon</button>
+          {/* <button className="card-button" > View Past Reports</button> */}
+           <Link to="/reports" className="card-button">
+            View Past Reports
+          </Link>
         </div>
 
         <div className="card learn-card">
