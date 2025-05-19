@@ -1,0 +1,176 @@
+/* Main container styling */
+.learn-more-card {
+  max-width: 56rem;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-left: 4px solid #38a169;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.learn-more-card:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Back button styling */
+/* .back-button {
+  position: absolute;
+  top: -2rem;
+  left: 0;
+  background: #f7fafc;
+  color: #4a5568;
+  padding: 0.5rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+} */
+
+.back-button:hover {
+  background: #4299e1;
+  color: white;
+  transform: translateX(-4px);
+}
+
+/* Title and description */
+.card-title {
+  font-size: 1.875rem;
+  color: #2d3748;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-description {
+  color: #718096;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* Code input area */
+.code-input {
+  width: 100%;
+  padding: 1.25rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.75rem;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.875rem;
+  color: #2d3748;
+  background: #f8fafc;
+  resize: vertical;
+  min-height: 160px;
+  transition: all 0.3s ease;
+}
+
+.code-input:focus {
+  outline: none;
+  border-color: #38a169;
+  box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.1);
+  background: #ffffff;
+}
+
+/* Submit button */
+.submit-button {
+  background: #38a169;
+  color: white;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.submit-button:hover {
+  background: #2f855c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(56, 161, 105, 0.1);
+}
+
+.submit-button:disabled {
+  background: #a0aec0;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Error message styling */
+.error-message {
+  color: #e53e3e;
+  background: #fff5f5;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-top: 1.5rem;
+  animation: errorShake 0.4s ease;
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+/* AI Suggestion section */
+.ai-suggestion {
+  background: #f7fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  animation: suggestionAppear 0.4s ease-out;
+}
+
+.suggestion-title {
+  color: #2d3748;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.code-snippet {
+  background: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.875rem;
+  white-space: pre-wrap;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+/* Guide link styling */
+.guide-link {
+  color: #4299e1;
+  text-decoration: underline;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.guide-link:hover {
+  color: #2b6cb0;
+  transform: translateX(2px);
+}
+
+@keyframes suggestionAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

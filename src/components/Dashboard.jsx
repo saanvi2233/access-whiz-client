@@ -32,10 +32,12 @@ function Dashboard() {
 
         <div className="card learn-card">
           <div className="card-icon">📚</div>
-          <h3>Learn More</h3>
-          <p>Understand what each accessibility issue means and how to fix them properly.</p>
-          <button className="card-button">Explore Guides</button>
-        </div>
+          <h3>AI Fix Generator</h3>
+          <p>    Instantly get AI-powered accessibility fixes for your HTML snippets and helpful WCAG guides.
+</p>
+ <Link to="/learn-more" className="card-button">
+          Try It Now
+          </Link>        </div>
       </div>
     </div>
   );

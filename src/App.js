@@ -7,6 +7,7 @@ import Reports from './pages/Reports';
 import DetailReport from './pages/DetailReport';
 
 import './App.css';
+import LearnMoreCard from './pages/LearnMoreCard.jsx';
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/reports" element={<Reports/>} />
               <Route path="/report/:id" element={<DetailReport />} />
+              <Route path="/learn-more" element={<LearnMoreCard />} />
 
             </Routes>
           </div>
